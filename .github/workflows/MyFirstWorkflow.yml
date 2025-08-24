@@ -9,6 +9,7 @@ jobs:
   first_job:
     name: My first Job
     runs-on: ubuntu-latest
+    environment: Test
     steps:
         - run: | 
             echo "Hello ${{ vars.WHO_TO_GREET }} from ${{ github.actor }}." 
@@ -16,5 +17,36 @@ jobs:
         - name: Checkout 
           uses: actions/checkout@v5.0.0
         - run: tree
+  Test:
+    runs-on: ubuntu-latest
+    environment: Test
+    needs: first_job
+    steps:
+    - run: |
+        echo "Hello ${{ vars.WHO_TO_GREET }} 👋 from ${{ github.actor }}." 
+        sec=$(echo ${{ secrets.MY_SECRET }} | sed 's/./& /g')
+        echo "My secret is 🤫 '$sec'."
         
+  Load-Test:
+    runs-on: ubuntu-latest
+    environment: Test
+    needs: first_job
+    steps:
+    - run: |
+        echo "Hello ${{ vars.WHO_TO_GREET }} 👋 from ${{ github.actor }}." 
+        sec=$(echo ${{ secrets.MY_SECRET }} | sed 's/./& /g')
+        echo "My secret is 🤫 '$sec'."
+        sleep 15
+
+  Production:
+    runs-on: ubuntu-latest
+    environment: Test
+    needs: [Test, Load-Test]
+    steps:
+    - run: |
+        echo "Hello ${{ vars.WHO_TO_GREET }} 👋 from ${{ github.actor }}." 
+        sec=$(echo ${{ secrets.MY_SECRET }} | sed 's/./& /g')
+        echo "My secret is 🤫 '$sec'."
+        sleep 15
+          
         
