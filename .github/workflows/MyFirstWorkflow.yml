@@ -3,15 +3,18 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+  
 jobs:
   first_job:
     name: My first Job
     runs-on: ubuntu-latest
     steps:
-        - name: Greet the user from 
-          run: | 
-            echo "Hello World from ${{github.actor}}" 
-            echo "Current branch is `${{github.ref}}'."
-          shell: bash
+        - run: | 
+            echo "Hello World from ${{ github.actor }}" 
+            echo "Current branch is `${{ github.ref }}'."
+        - name: Checkout 
+          uses: actions/checkout@v5.0.0
+        - run: tree
         
         
