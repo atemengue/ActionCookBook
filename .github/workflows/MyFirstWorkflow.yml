@@ -29,7 +29,7 @@ jobs:
         
   Load-Test:
     runs-on: ubuntu-latest
-    environment: Test
+    environment: Load-Test
     needs: first_job
     steps:
     - run: |
@@ -40,7 +40,9 @@ jobs:
 
   Production:
     runs-on: ubuntu-latest
-    environment: Test
+    environment: 
+      name: Production
+      url: https://writeabout.com
     needs: [Test, Load-Test]
     steps:
     - run: |
